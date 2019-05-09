@@ -1,0 +1,14 @@
+insert into software_version (name, version, release_date) values ('postgresql', '9.4.0', '2014-12-18');
+insert into software_version (name, version, release_date) values ('postgresql', '9.5.0', '2016-11-07');
+insert into software_version (name, version, release_date) values ('postgresql', '9.6.0', '2016-09-29');
+insert into software_version (name, version, release_date) values ('postgresql', '10', '2017-10-05');
+insert into software_version (name, version, release_date) values ('postgresql', '11', '2018-10-18');
+insert into software_version (name, version, release_date) values ('python', '3.7.0', '2019-03-25');
+insert into software_version (name, version, release_date) values ('python', '3.6.0', '2016-12-23');
+insert into software_version (name, version, release_date) values ('python', '3.5.0', '2015-09-13');
+insert into software_version (name, version, release_date) values ('python', '3.4.0', '2014-03-16');
+insert into software_version (name, version, release_date) values ('python', '3.3.0', '2012-09-29');
+insert into software_version (name, version, release_date) values ('python', '3.2', '2011-02-20');
+insert into software_version (name, version, release_date) values ('python', '3.1', '2009-06-27');
+insert into software_version (name, version, release_date) values ('python', '3.0', '2008-12-03');
+insert into software_version (name, version, release_date) values ('python', '2.7', '2010-07-04');
