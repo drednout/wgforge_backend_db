@@ -1,0 +1,89 @@
+vagrant@postgresql:~$ sudo bash
+root@postgresql:~# sudo -u postgres psql
+psql (11.2 (Ubuntu 11.2-1.pgdg14.04+1))
+Type "help" for help.
+
+postgres=# select * from pg_stat_activity ;
+postgres=# \x on
+Expanded display is on.
+postgres=# select * from pg_stat_activity ;
+...
+postgres=# select * from pg_stat_activity where application_name='psql';
+-[ RECORD 1
+]----+--------------------------------------------------------------
+datid            | 13012
+datname          | postgres
+pid              | 27477
+usesysid         | 10
+usename          | postgres
+application_name | psql
+client_addr      |
+client_hostname  |
+client_port      | -1
+backend_start    | 2019-05-10 12:02:37.755606+00
+xact_start       | 2019-05-10 12:07:18.149234+00
+query_start      | 2019-05-10 12:07:18.149234+00
+state_change     | 2019-05-10 12:07:18.149238+00
+wait_event_type  |
+wait_event       |
+state            | active
+backend_xid      |
+backend_xmin     | 594
+query            | select * from pg_stat_activity where
+application_name='psql';
+backend_type     | client backend
+-[ RECORD 2
+]----+--------------------------------------------------------------
+datid            | 16386
+datname          | wgforgedb_test
+pid              | 27888
+usesysid         | 16384
+usename          | wgforgedb
+application_name | psql
+client_addr      | 127.0.0.1
+client_hostname  |
+client_port      | 35908
+backend_start    | 2019-05-10 12:07:10.60032+00
+xact_start       |
+query_start      | 2019-05-10 12:07:15.584697+00
+state_change     | 2019-05-10 12:07:15.588214+00
+wait_event_type  | Client
+wait_event       | ClientRead
+state            | idle
+backend_xid      |
+backend_xmin     |
+query            | select count(1) from software_version;
+backend_type     | client backend
+
+wgforgedb_test=> select pg_size_pretty(pg_database_size('wgforgedb_test') );
+ pg_size_pretty
+----------------
+ 7763 kB
+(1 row)
+
+wgforgedb_test=> \l+
+wgforgedb_test=> \l+ wgforgedb_test
+                                                     List of databases
+      Name      |  Owner   | Encoding |   Collate   |    Ctype    | Access privileges |  Size   | Tablespace | Description
+----------------+----------+----------+-------------+-------------+-------------------+---------+------------+-------------
+ wgforgedb_test | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 |                   | 7763 kB | pg_default |
+(1 row)
+
+
+wgforgedb_test=> select * from pg_tables where tablename='software_version';
+ schemaname |    tablename     | tableowner | tablespace | hasindexes | hasrules | hastriggers | rowsecurity
+------------+------------------+------------+------------+------------+----------+-------------+-------------
+ public     | software_version | wgforgedb  |            | t          | f        | f           | f
+(1 row)
+
+wgforgedb_test=> \d
+                    List of relations
+ Schema |          Name           |   Type   |   Owner
+--------+-------------------------+----------+-----------
+ public | software_version        | table    | wgforgedb
+ public | software_version_id_seq | sequence | wgforgedb
+
+wgforgedb_test2=> select * from pg_stat_statements;
+ERROR:  relation "pg_stat_statements" does not exist
+LINE 1: select * from pg_stat_statements;
+
