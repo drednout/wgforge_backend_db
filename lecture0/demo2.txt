@@ -1,0 +1,90 @@
+vagrant@postgresql:~$ PGPASSWORD=wgforgedb psql -h localhost -p 5432 -U
+wgforgedb wgforgedb_test
+psql (11.2 (Ubuntu 11.2-1.pgdg14.04+1))
+SSL connection (protocol: TLSv1.2, cipher: ECDHE-RSA-AES256-GCM-SHA384, bits:
+256, compression: off)
+Type "help" for help.
+wgforgedb_test=> show log_min_duration_statement;
+ log_min_duration_statement
+ ----------------------------
+  -1
+$ sudo bash
+root@postgresql:~#  echo 'log_min_duration_statement = 0'  >> /etc/postgresql/11/main/postgresql.conf
+root@postgresql:~# tail -n1 /etc/postgresql/11/main/postgresql.conf
+
+log_min_duration_statement = 0
+
+# CTRL+D
+
+vagrant@postgresql:~$ PGPASSWORD=wgforgedb psql -h localhost -p 5432 -U
+wgforgedb wgforgedb_test
+psql (11.2 (Ubuntu 11.2-1.pgdg14.04+1))
+SSL connection (protocol: TLSv1.2, cipher: ECDHE-RSA-AES256-GCM-SHA384, bits:
+256, compression: off)
+Type "help" for help.
+wgforgedb_test=> show log_min_duration_statement ;
+ log_min_duration_statement
+ ----------------------------
+  0
+wgforgedb_test=> select count(1) from software_version;
+ count
+ -------
+     14
+     (1 row)
+# CTRL + D
+$ sudo bash
+root@postgresql:~#  echo 'log_min_duration_statement = 0'  >> /etc/postgresql/11/main/postgresql.conf
+# tail -n1 /var/log/postgresql/postgresql-11-main.log
+2019-05-10 11:48:39.337 UTC [26934] wgforgedb@wgforgedb_test LOG:  duration:
+1.954 ms  statement: select count(1) from software_version;
+
+# CTRL + D
+vagrant@postgresql:~$ PGPASSWORD=wgforgedb psql -h localhost -p 5432 -U
+wgforgedb_test=> show max_connections ;
+ max_connections
+ -----------------
+  100
+
+# CTRL + D
+$ sudo bash
+root@postgresql:~# tail -n1 -n10 /var/log/postgresql/postgresql-11-main.log
+...
+2019-05-10 11:51:46.356 UTC [11873] LOG:  received SIGHUP, reloading
+configuration files
+2019-05-10 11:51:46.356 UTC [11873] LOG:  parameter "max_connections" cannot
+be changed without restarting the server
+2019-05-10 11:51:46.356 UTC [11873] LOG:  configuration file
+"/etc/postgresql/11/main/postgresql.conf" contains errors; unaffected changes
+were applied
+
+root@postgresql:~# pg_ctlcluster 11 main restart
+root@postgresql:~# tail -n1 -n10 /var/log/postgresql/postgresql-11-main.log
+...
+2019-05-10 11:53:16.509 UTC [11875] LOG:  shutting down
+2019-05-10 11:53:16.518 UTC [11873] LOG:  database system is shut down
+2019-05-10 11:53:16.632 UTC [27165] LOG:  listening on IPv4 address "0.0.0.0",
+port 5432
+2019-05-10 11:53:16.632 UTC [27165] LOG:  listening on IPv6 address "::", port
+5432
+2019-05-10 11:53:16.632 UTC [27165] LOG:  listening on Unix socket
+"/var/run/postgresql/.s.PGSQL.5432"
+2019-05-10 11:53:16.640 UTC [27166] LOG:  database system was shut down at
+2019-05-10 11:53:16 UTC
+2019-05-10 11:53:16.644 UTC [27165] LOG:  database system is ready to accept
+connections
+
+root@postgresql:~# exit
+vagrant@postgresql:~$ PGPASSWORD=wgforgedb psql -h localhost -p 5432 -U
+wgforgedb wgforgedb_test
+psql (11.2 (Ubuntu 11.2-1.pgdg14.04+1))
+SSL connection (protocol: TLSv1.2, cipher: ECDHE-RSA-AES256-GCM-SHA384, bits:
+256, compression: off)
+Type "help" for help.
+
+wgforgedb_test=> show max_connections ;
+ max_connections
+ -----------------
+  200
+  (1 row)
+
+
