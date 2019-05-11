@@ -1,5 +1,5 @@
 --DROP TABLE IF EXISTS player;
-CREATE TABLE IF NOT EXISTS normalized.player
+CREATE TABLE IF NOT EXISTS player
 (
     id BIGINT NOT NULL,
     nickname TEXT NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS normalized.player
     CONSTRAINT player_nickname_key UNIQUE (nickname)
 );
 
-CREATE TABLE IF NOT EXISTS normalized.money
+CREATE TABLE IF NOT EXISTS money
 (
     id BIGINT NOT NULL,
     player_id BIGINT NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS normalized.money
 
 
 
-CREATE TABLE IF NOT EXISTS normalized.achievement
+CREATE TABLE IF NOT EXISTS achievement
 (
     id BIGINT NOT NULL,
     player_id BIGINT NOT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS normalized.achievement
 
 
 
-CREATE TABLE IF NOT EXISTS normalized.auth_token
+CREATE TABLE IF NOT EXISTS auth_token
 (
     id BIGINT NOT NULL,
     player_id BIGINT NOT NULL,
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS normalized.auth_token
 
 
 CREATE TYPE log_action_type AS ENUM('loging', 'registration', 'battle', 'achievement', 'battle_win', 'money_earn');
-CREATE TABLE IF NOT EXISTS normalized.log_action
+CREATE TABLE IF NOT EXISTS log_action
 (
     id BIGINT NOT NULL,
     player_id BIGINT NOT NULL,
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS normalized.log_action
     CONSTRAINT log_action_id_pkey PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS normalized.rating_by_money_earn
+CREATE TABLE IF NOT EXISTS rating_by_money_earn
 (
     id BIGINT NOT NULL,
     player_id BIGINT NOT NULL,

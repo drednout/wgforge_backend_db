@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS player;
-CREATE TABLE IF NOT EXISTS denormalized.player
+CREATE TABLE IF NOT EXISTS player
 (
     id BIGINT NOT NULL,
     nickname TEXT NOT NULL,
@@ -20,8 +20,8 @@ CREATE TABLE IF NOT EXISTS denormalized.player
 );
 
 
---DROP TABLE IF EXISTS log_action;
-CREATE TABLE IF NOT EXISTS denormalized.log_action
+DROP TABLE IF EXISTS log_action;
+CREATE TABLE IF NOT EXISTS log_action
 (
     id BIGINT NOT NULL,
     player_id BIGINT NOT NULL,
@@ -37,4 +37,4 @@ CREATE TABLE IF NOT EXISTS denormalized.log_action
 
     CONSTRAINT log_action_id_pkey PRIMARY KEY (id)
 );
-CREATE INDEX IF NOT EXISTS log_action_player_idx ON denormalized.log_action (player_id);
+CREATE INDEX IF NOT EXISTS log_action_player_idx ON log_action (player_id);
