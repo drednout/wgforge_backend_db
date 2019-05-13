@@ -14,6 +14,8 @@ root@postgresql:~# tail -n1 /etc/postgresql/11/main/postgresql.conf
 
 log_min_duration_statement = 0
 
+root@postgresql:~# pg_ctlcluster 11 main reload
+
 # CTRL+D
 
 vagrant@postgresql:~$ PGPASSWORD=wgforgedb psql -h localhost -p 5432 -U
@@ -38,6 +40,7 @@ root@postgresql:~#  echo 'log_min_duration_statement = 0'  >> /etc/postgresql/11
 2019-05-10 11:48:39.337 UTC [26934] wgforgedb@wgforgedb_test LOG:  duration:
 1.954 ms  statement: select count(1) from software_version;
 
+root@postgresql:~# pg_ctlcluster 11 main reload
 # CTRL + D
 vagrant@postgresql:~$ PGPASSWORD=wgforgedb psql -h localhost -p 5432 -U
 wgforgedb_test=> show max_connections ;
