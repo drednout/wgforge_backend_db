@@ -1,0 +1,14 @@
+# run psql
+$ PGPASSWORD=wgforge /usr/lib/postgresql/11/bin/psql -h localhost -p 5436 -U
+wgforge
+=> BEGIN;
+=> SELECT id as player1_id from player where nickname='vasya' \gset
+=> UPDATE MONEY set amount=30000 where player_id=:player1_id and
+currency_code='gold';
+-- COMMIT;
+
+# second shell
+$ ps fax |grep postgres
+$ kill <postgres_master> <postgres_server_process>
+$ kill -9 <postgres_master> <postgres_server_process>
+
