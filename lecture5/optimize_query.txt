@@ -1,0 +1,59 @@
+# first psql
+wgforge=# create UNIQUE INDEX IF NOT EXISTS player_email_idx ON player
+(email);
+CREATE INDEX
+Time: 24708.023 ms (00:24.708)
+
+
+# in the meantime, second psql
+wgforge=# insert into player (nickname, email, password)  SELECT 'vasya' ||
+'_' || suffix, 'vasya_' || suffix || '@tut.by', suffix FROM (SELECT
+generate_series(10000001, 10000010) as suffix) gen;
+INSERT 0 10
+
+
+
+# again first psql
+wgforge=# drop index player_email_idx ;
+DROP INDEX
+Time: 51.956 ms
+wgforge=# create UNIQUE INDEX CONCURRENTLY IF NOT EXISTS player_email_idx ON
+player (email);
+CREATE INDEX
+Time: 26280.781 ms (00:26.281)
+
+
+# in the meantime, second psql
+wgforge=# insert into player (nickname, email, password)  SELECT 'vasya' ||
+'_' || suffix, 'vasya_' || suffix || '@tut.by', suffix FROM (SELECT
+generate_series(10000011, 10000020) as suffix) gen;
+
+
+# any psql
+wgforge=# explain analyze select * from player where
+email='vasya_9890779@tut.by';
+-[ RECORD 1
+]------------------------------------------------------------------------------------------------------------------------
+QUERY PLAN | Index Scan using player_email_idx on player  (cost=0.56..8.58
+rows=1 width=64) (actual time=0.052..0.053 rows=1 loops=1)
+-[ RECORD 2
+]------------------------------------------------------------------------------------------------------------------------
+QUERY PLAN |   Index Cond: (email = 'vasya_9890779@tut.by'::text)
+-[ RECORD 3
+]------------------------------------------------------------------------------------------------------------------------
+QUERY PLAN | Planning Time: 0.209 ms
+-[ RECORD 4
+]------------------------------------------------------------------------------------------------------------------------
+QUERY PLAN | Execution Time: 0.078 ms
+
+Time: 0.791 ms
+wgforge=#  select * from player where email='vasya_9890779@tut.by';
+-[ RECORD 1 ]------------------------
+id       | 17160000
+nickname | vasya_9890779
+email    | vasya_9890779@tut.by
+password | 9890779
+created  | 2019-05-29 04:27:48.091596
+updated  | 2019-05-29 04:27:48.091596
+
+Time: 0.499 ms

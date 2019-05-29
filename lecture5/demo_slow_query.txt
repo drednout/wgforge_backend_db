@@ -1,0 +1,127 @@
+wgforge=# \x
+Expanded display is on.
+wgforge=# \timing
+Timing is on.
+wgforge=# select * from player where nickname='vasya_9890779';
+-[ RECORD 1 ]------------------------
+id       | 17160000
+nickname | vasya_9890779
+email    | vasya_9890779@tut.by
+password | 9890779
+created  | 2019-05-29 04:27:48.091596
+updated  | 2019-05-29 04:27:48.091596
+
+Time: 0.483 ms
+wgforge=# select * from player where id=17160000;
+-[ RECORD 1 ]------------------------
+id       | 17160000
+nickname | vasya_9890779
+email    | vasya_9890779@tut.by
+password | 9890779
+created  | 2019-05-29 04:27:48.091596
+updated  | 2019-05-29 04:27:48.091596
+
+Time: 0.461 ms
+wgforge=# select * from player where email='vasya_9890779@tut.by';
+-[ RECORD 1 ]------------------------
+id       | 17160000
+nickname | vasya_9890779
+email    | vasya_9890779@tut.by
+password | 9890779
+created  | 2019-05-29 04:27:48.091596
+updated  | 2019-05-29 04:27:48.091596
+
+Time: 354.303 ms
+wgforge=# select * from player where email='vasya_9890779@gmail.com';
+(0 rows)
+
+Time: 321.338 ms
+wgforge=# explain select * from player where email='vasya_9890779@tut.by';
+-[ RECORD 1
+]-------------------------------------------------------------------------
+QUERY PLAN | Gather  (cost=1000.00..175565.36 rows=1 width=64)
+-[ RECORD 2
+]-------------------------------------------------------------------------
+QUERY PLAN |   Workers Planned: 2
+-[ RECORD 3
+]-------------------------------------------------------------------------
+QUERY PLAN |   ->  Parallel Seq Scan on player  (cost=0.00..174565.26 rows=1
+width=64)
+-[ RECORD 4
+]-------------------------------------------------------------------------
+QUERY PLAN |         Filter: (email = 'vasya_9890779@tut.by'::text)
+
+Time: 1.773 ms
+wgforge=# explain select * from player where email='vasya_9890779';
+-[ RECORD 1
+]-------------------------------------------------------------------------
+QUERY PLAN | Gather  (cost=1000.00..175565.36 rows=1 width=64)
+-[ RECORD 2
+]-------------------------------------------------------------------------
+QUERY PLAN |   Workers Planned: 2
+-[ RECORD 3
+]-------------------------------------------------------------------------
+QUERY PLAN |   ->  Parallel Seq Scan on player  (cost=0.00..174565.26 rows=1
+width=64)
+-[ RECORD 4
+]-------------------------------------------------------------------------
+QUERY PLAN |         Filter: (email = 'vasya_9890779'::text)
+
+Time: 0.486 ms
+wgforge=# explain select * from player where nickname='vasya_9890779';
+-[ RECORD 1
+]---------------------------------------------------------------------------------
+QUERY PLAN | Index Scan using player_nickname_key on player  (cost=0.56..8.58
+rows=1 width=64)
+-[ RECORD 2
+]---------------------------------------------------------------------------------
+QUERY PLAN |   Index Cond: (nickname = 'vasya_9890779'::text)
+
+Time: 0.509 ms
+wgforge=# \d
+wgforge=# explain analyze select * from player where nickname='vasya_9890779';
+-[ RECORD 1
+]---------------------------------------------------------------------------------------------------------------------------
+QUERY PLAN | Index Scan using player_nickname_key on player  (cost=0.56..8.58
+rows=1 width=64) (actual time=0.050..0.051 rows=1 loops=1)
+-[ RECORD 2
+]---------------------------------------------------------------------------------------------------------------------------
+QUERY PLAN |   Index Cond: (nickname = 'vasya_9890779'::text)
+-[ RECORD 3
+]---------------------------------------------------------------------------------------------------------------------------
+QUERY PLAN | Planning Time: 0.103 ms
+-[ RECORD 4
+]---------------------------------------------------------------------------------------------------------------------------
+QUERY PLAN | Execution Time: 0.076 ms
+
+Time: 0.572 ms
+wgforge=# explain analyze select * from player where
+email='vasya_9890779@tut.by';
+-[ RECORD 1
+]-----------------------------------------------------------------------------------------------------------------------
+QUERY PLAN | Gather  (cost=1000.00..175565.36 rows=1 width=64) (actual
+time=346.642..352.558 rows=1 loops=1)
+-[ RECORD 2
+]-----------------------------------------------------------------------------------------------------------------------
+QUERY PLAN |   Workers Planned: 2
+-[ RECORD 3
+]-----------------------------------------------------------------------------------------------------------------------
+QUERY PLAN |   Workers Launched: 2
+-[ RECORD 4
+]-----------------------------------------------------------------------------------------------------------------------
+QUERY PLAN |   ->  Parallel Seq Scan on player  (cost=0.00..174565.26 rows=1
+width=64) (actual time=344.798..346.067 rows=0 loops=3)
+-[ RECORD 5
+]-----------------------------------------------------------------------------------------------------------------------
+QUERY PLAN |         Filter: (email = 'vasya_9890779@tut.by'::text)
+-[ RECORD 6
+]-----------------------------------------------------------------------------------------------------------------------
+QUERY PLAN |         Rows Removed by Filter: 3333333
+-[ RECORD 7
+]-----------------------------------------------------------------------------------------------------------------------
+QUERY PLAN | Planning Time: 0.090 ms
+-[ RECORD 8
+]-----------------------------------------------------------------------------------------------------------------------
+QUERY PLAN | Execution Time: 352.584 ms
+
+Time: 353.074 ms
