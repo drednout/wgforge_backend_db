@@ -1,0 +1,3 @@
+time sudo -u postgres /usr/lib/postgresql/11/bin/pgbench -c 10 -T 10 -p 5436 wgforge -r -f do_player_select_bench.sql
+time sudo -u postgres /usr/lib/postgresql/11/bin/pgbench -c 10 -T 10 -p 5436 wgforge -r -f do_player_update_bench.sql 
+
